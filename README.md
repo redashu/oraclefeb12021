@@ -432,4 +432,90 @@ bin     etc     lib     mnt     proc    run     srv     tmp     var
 
 ```
 
+# web server 
+
+<img src="webserver.png">
+
+
+# systemd in container 
+
+```
+[root@ac571c9ecba8 /]# systemctl start  httpd
+System has not been booted with systemd as init system (PID 1). Can't operate.
+Failed to connect to bus: Host is down
+
+```
+
+## httpd with html web app
+
+```
+❯ docker  build -t  ashuhttpd:v1  -f  httpd.dockerfile .
+Sending build context to Docker daemon  1.413MB
+Step 1/7 : from oraclelinux:8.3
+ ---> f4a1f2c861ca
+Step 2/7 : MAINTAINER  ashutoshh
+ ---> Using cache
+ ---> 250420ce26da
+Step 3/7 : RUN yum  install httpd -y
+ ---> Using cache
+ ---> bbca89bddb9e
+Step 4/7 : WORKDIR /var/www/html
+ ---> Using cache
+ ---> 410ad6d794bf
+Step 5/7 : COPY project-html-website  .
+ ---> 135aca42845b
+Step 6/7 : EXPOSE 80
+ ---> Running in 3019297a0a82
+Removing intermediate container 3019297a0a82
+ ---> 9c715a58c54f
+Step 7/7 : CMD ["httpd","-DFOREGROUND"]
+ ---> Running in fa1bd6c853da
+Removing intermediate container fa1bd6c853da
+ ---> 217d55e0b95d
+Successfully built 217d55e0b95d
+Successfully tagged ashuhttpd:v1
+
+```
+
+## 
+
+```
+5310  docker  build -t  ashuhttpd:v1  -f  httpd.dockerfile . 
+❯ docker images
+REPOSITORY      TAG       IMAGE ID       CREATED         SIZE
+ashuhttpd       v1        217d55e0b95d   5 minutes ago   550MB
+ashujava        v1        870f495d371d   2 hours ago     643MB
+ashualppython   v1        1c2772260a65   2 hours ago     51.2MB
+ashupython      v1        a66c60ca01d2   2 hours ago     885MB
+alpine          latest    e50c909a8df2   3 days ago      5.61MB
+python          latest    4b9378be0bb9   6 days ago      885MB
+oraclelinux     8.3       f4a1f2c861ca   2 weeks ago     429MB
+java            latest    d23bdf5b1b1b   4 years ago     643MB
+❯ docker run -d --name webc1 -p  1122:80  ashuhttpd:v1
+389561178f8e75f5321f9543bda8906f93c0cf1f1397b0ffcc55dec84ab6d249
+
+```
+
+## kill & remove all the containers
+
+```
+ docker kill $(docker ps -q)
+389561178f8e
+0c378939fa62
+e60a53c753c8
+d99cceddc81e
+051cbc56891b
+❯ docker rm  $(docker ps -qa)
+389561178f8e
+ac571c9ecba8
+0c378939fa62
+e60a53c753c8
+d99cceddc81e
+051cbc56891b
+09b82b13e692
+9caa2f0c96b8
+80eb64dcf736
+5f2de7e8f1be
+
+```
 
