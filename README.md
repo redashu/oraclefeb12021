@@ -386,4 +386,50 @@ Successfully tagged ashujava:v1
  
  ```
  
+ ## Question 1 -- Solution 
  
+ ```
+ ❯ docker run -d --name ashutoshhc1  alpine  ping fb.com
+e60a53c753c8535b91535578722ad035188d987e355364b89583722f3dc5f099
+❯ docker run -d --name ashutoshhc2  alpine  ping fb.com
+0c378939fa62f7f1c7dcec6e3202c1d6d02c8b6e49491247c89d8702b99cb7b8
+❯ 
+❯ 
+❯ docker  exec  -it  ashutoshhc1  sh
+/ # uname -r
+4.19.121-linuxkit
+/ # cat  /etc/os-release 
+NAME="Alpine Linux"
+ID=alpine
+VERSION_ID=3.13.1
+PRETTY_NAME="Alpine Linux v3.13"
+HOME_URL="https://alpinelinux.org/"
+BUG_REPORT_URL="https://bugs.alpinelinux.org/"
+/ # pwd
+/
+/ # ls
+bin    dev    etc    home   lib    media  mnt    opt    proc   root   run    sbin   srv    sys    tmp    usr    var
+/ # echo  hello >aa.txt 
+/ # echo  hello >bb.txt 
+/ # ls
+aa.txt  bin     etc     lib     mnt     proc    run     srv     tmp     var
+bb.txt  dev     home    media   opt     root    sbin    sys     usr
+/ # 
+
+----
+
+❯ docker  exec  -it  ashutoshhc1  ls  /
+aa.txt  dev     lib     opt     run     sys     var
+bb.txt  etc     media   proc    sbin    tmp
+bin     home    mnt     root    srv     usr
+❯ docker  cp  ashutoshhc1:/aa.txt  .
+❯ ls
+Dockerfile aa.txt     ashu.java
+❯ docker  cp aa.txt  ashutoshhc2:/
+❯ docker  exec  -it  ashutoshhc2  ls  /
+aa.txt  dev     home    media   opt     root    sbin    sys     usr
+bin     etc     lib     mnt     proc    run     srv     tmp     var
+
+```
+
+
