@@ -143,4 +143,132 @@ java                latest              d23bdf5b1b1b        4 years ago         
 
 ```
 
+## Parent process in Container 
+
+<img src="pp.png">
+
+# First container creation 
+
+```
+❯ docker  run  alpine  cal
+   February 2021
+Su Mo Tu We Th Fr Sa
+    1  2  3  4  5  6
+ 7  8  9 10 11 12 13
+14 15 16 17 18 19 20
+21 22 23 24 25 26 27
+28
+                     
+❯ docker  ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+
+
+
+
+
+
+❯ docker  ps  -a
+CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS                      PORTS     NAMES
+d35ebb26b6e3   alpine    "cal"     41 seconds ago   Exited (0) 39 seconds ago             amazing_germain
+
+```
+
+
+## creating container with custom name 
+
+```
+❯ docker  run --name  ashuc1  -d   alpine  ping google.com
+f31fb713d2e33474bca6a588a7e30fedbb9be6d1ee27d66cbf482fe356bdf2c4
+❯ 
+❯ docker  ps
+CONTAINER ID   IMAGE     COMMAND             CREATED         STATUS         PORTS     NAMES
+f31fb713d2e3   alpine    "ping google.com"   4 seconds ago   Up 3 seconds             ashuc1
+❯ docker  ps -a
+CONTAINER ID   IMAGE     COMMAND             CREATED          STATUS                      PORTS     NAMES
+f31fb713d2e3   alpine    "ping google.com"   8 seconds ago    Up 7 seconds                          ashuc1
+7a40438fdf00   alpine    "ping 8.8.8.8"      8 minutes ago    Exited (1) 7 minutes ago              reverent_greider
+d35ebb26b6e3   alpine    "cal"               11 minutes ago   Exited (0) 11 minutes ago             amazing_germain
+❯ docker logs  ashuc1
+PING google.com (142.250.67.142): 56 data bytes
+
+
+```
+
+
+## Container start & stop 
+
+```
+❯ docker  stop  ashuc1
+ashuc1
+❯ docker  ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+❯ docker  ps -a
+CONTAINER ID   IMAGE     COMMAND             CREATED              STATUS                       PORTS     NAMES
+f31fb713d2e3   alpine    "ping google.com"   About a minute ago   Exited (137) 6 seconds ago             ashuc1
+7a40438fdf00   alpine    "ping 8.8.8.8"      10 minutes ago       Exited (1) 8 minutes ago               reverent_greider
+d35ebb26b6e3   alpine    "cal"               13 minutes ago       Exited (0) 13 minutes ago              amazing_germain
+❯ docker  start ashuc1
+ashuc1
+❯ docker  ps
+CONTAINER ID   IMAGE     COMMAND             CREATED         STATUS         PORTS     NAMES
+f31fb713d2e3   alpine    "ping google.com"   2 minutes ago   Up 3 seconds             ashuc1
+
+
+```
+
+
+## case 1 docker done
+
+```
+5208  docker  run --name  ashuc1  -d   alpine  ping google.com 
+ 5209  docker  ps
+ 5210  docker  ps -a
+ 5211  docker logs  ashuc1  
+ 5212  docker  stop  ashuc1
+ 5213  docker  ps
+ 5214  docker  ps -a
+ 5215  docker  start ashuc1
+ 5216  docker  ps
+
+```
+
+## Remove containers from Docker engine 
+
+```
+❯ docker  ps  -a
+CONTAINER ID   IMAGE     COMMAND             CREATED          STATUS                      PORTS     NAMES
+f31fb713d2e3   alpine    "ping google.com"   6 minutes ago    Up 3 minutes                          ashuc1
+7a40438fdf00   alpine    "ping 8.8.8.8"      14 minutes ago   Exited (1) 13 minutes ago             reverent_greider
+d35ebb26b6e3   alpine    "cal"               17 minutes ago   Exited (0) 17 minutes ago             amazing_germain
+❯ docker rm   reverent_greider  d35ebb26b6e3
+reverent_greider
+d35ebb26b6e3
+❯ docker  ps  -a
+CONTAINER ID   IMAGE     COMMAND             CREATED         STATUS         PORTS     NAMES
+f31fb713d2e3   alpine    "ping google.com"   6 minutes ago   Up 4 minutes             ashuc1
+
+```
+
+# Docker image building 
+
+<img src="dimg.png">
+
+## Container created state
+
+```
+                    
+❯ docker  ps  -a
+CONTAINER ID   IMAGE     COMMAND         CREATED          STATUS                     PORTS     NAMES
+5f2de7e8f1be   alpine    "cal"           3 seconds ago    Exited (0) 2 seconds ago             x2
+3892881fed3b   alpine    "ping fb.com"   15 seconds ago   Up 14 seconds                        x1
+❯ docker run  --name x3  alpine calllllll344546565
+docker: Error response from daemon: OCI runtime create failed: container_linux.go:370: starting container process caused: exec: "calllllll344546565": executable file not found in $PATH: unknown.
+❯ docker  ps  -a
+CONTAINER ID   IMAGE     COMMAND                CREATED          STATUS                      PORTS     NAMES
+80eb64dcf736   alpine    "calllllll344546565"   3 seconds ago    Created                               x3
+5f2de7e8f1be   alpine    "cal"                  29 seconds ago   Exited (0) 28 seconds ago             x2
+3892881fed3b   alpine    "ping fb.com"          41 seconds ago   Up 40 seconds                         x1
+
+```
 
