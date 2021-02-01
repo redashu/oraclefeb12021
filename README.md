@@ -272,3 +272,69 @@ CONTAINER ID   IMAGE     COMMAND                CREATED          STATUS         
 
 ```
 
+# Docker image building process
+
+## python code with Dockerfile
+
+```
+❯ docker build  -t  ashupython:v1  .
+Sending build context to Docker daemon  3.584kB
+Step 1/5 : FROM  python:latest
+latest: Pulling from library/python
+b9a857cbf04d: Pull complete 
+d557ee20540b: Pull complete 
+3b9ca4f00c2e: Pull complete 
+667fd949ed93: Pull complete 
+4ad46e8a18e5: Pull complete 
+381aea9d4031: Pull complete 
+7eccd8441f11: Pull complete 
+8c148153e894: Pull complete 
+eca80e9a7026: Pull complete 
+Digest: sha256:37a5e011a522f3ba328e1ea30d2cb22513dbbfc99d6002bf37b205fab5a4564f
+Status: Downloaded newer image for python:latest
+ ---> 4b9378be0bb9
+Step 2/5 : MAINTAINER  ashutoshh , ashutoshh@linux.com
+ ---> Running in 3bb83100f290
+ 
+ 
+```
+
+## creating python based container & checking output 
+
+```
+ docker  run  --name ashucx1  -d  -it  ashupython:v1 
+5262  docker  logs  ashucx1 
+ 5263  docker  logs  -f  ashucx1 
+
+```
+
+
+## Docker storage of images 
+
+## on Docker engine server 
+
+```
+[root@ip-172-31-32-255 ~]# cd  /var/lib/docker/
+[root@ip-172-31-32-255 docker]# ls
+builder  buildkit  containers  image  network  overlay2  plugins  runtimes  swarm  tmp  trust  volumes
+[root@ip-172-31-32-255 docker]# cd  image/
+[root@ip-172-31-32-255 image]# ls
+overlay2
+[root@ip-172-31-32-255 image]# cd  overlay2/
+[root@ip-172-31-32-255 overlay2]# ls
+distribution  imagedb  layerdb  repositories.json
+[root@ip-172-31-32-255 overlay2]# cd  imagedb/
+[root@ip-172-31-32-255 imagedb]# ls
+content  metadata
+[root@ip-172-31-32-255 imagedb]# cd  content/
+[root@ip-172-31-32-255 content]# ls
+sha256
+[root@ip-172-31-32-255 content]# cd sha256/
+[root@ip-172-31-32-255 sha256]# ls
+4b9378be0bb93645a620a16b184f80109c784a10a5802a170c7468c853c2f962
+d23bdf5b1b1b1afce5f1d0fd33e7ed8afbc084b594b9ccf742a5b27080d8a4a8
+e50c909a8df2b7c8b92a6e8730e210ebe98e5082871e66edd8ef4d90838cbd25
+f4a1f2c861ca52c254cdbddcd1a8c8626e3da036f092b0f485480dbb8aee1226
+
+```
+
