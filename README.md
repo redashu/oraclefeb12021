@@ -338,3 +338,52 @@ f4a1f2c861ca52c254cdbddcd1a8c8626e3da036f092b0f485480dbb8aee1226
 
 ```
 
+## Dockerfile with java comipler code 
+
+```
+❯ ls
+Dockerfile ashu.java
+❯ docker  build -t  ashujava:v1  .
+Sending build context to Docker daemon  3.072kB
+Step 1/7 : FROM java
+ ---> d23bdf5b1b1b
+Step 2/7 : MAINTAINER ashutoshh@linux.com
+ ---> Running in 78d87bc388fe
+Removing intermediate container 78d87bc388fe
+ ---> e1391816a1bc
+Step 3/7 : RUN mkdir /codes
+ ---> Running in 3e1bfffe5146
+Removing intermediate container 3e1bfffe5146
+ ---> 5bf2fe03664d
+Step 4/7 : COPY ashu.java /codes/ashu.java
+ ---> 9e150f870c3f
+Step 5/7 : WORKDIR /codes
+ ---> Running in 880ce4f9b81e
+Removing intermediate container 880ce4f9b81e
+ ---> 134f18ab997d
+Step 6/7 : RUN javac ashu.java
+ ---> Running in 87fc531ec53a
+Removing intermediate container 87fc531ec53a
+ ---> c5faacb52a21
+Step 7/7 : CMD ["java","myclass"]
+ ---> Running in 5116c5e71f7c
+Removing intermediate container 5116c5e71f7c
+ ---> 870f495d371d
+Successfully built 870f495d371d
+Successfully tagged ashujava:v1
+
+```
+
+## creating container
+
+```
+5276  docker  build -t  ashujava:v1  . 
+ 5277  history
+ 5278  docker  images
+ 5279  docker run -d -it --name x1ashuc1  ashujava:v1  
+ 5280  docker  ps
+ 5281  docker logs -f  x1ashuc1 
+ 
+ ```
+ 
+ 
