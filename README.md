@@ -127,3 +127,26 @@ tomcat       latest    66d886628b2a   7 hours ago      668MB
 alpine       latest    e50c909a8df2   4 days ago       5.61MB
 
 ```
+
+# Container image registry 
+
+<img src="reg.png">
+
+## docker image name explain 
+
+<img src="imgname.png">
+
+## pusing image to docker hub 
+
+```
+docker  tag  ashujsp:v001  dockerashu/ashujsp:v001
+
+docker  login 
+docker  push dockerashu/ashujsp:v001 
+
+```
+
+## OCR is almost same as ACR 
+
+['OCR'] ('https://www.oracle.com/webfolder/technetwork/tutorials/obe/oci/registry/index.html')
+
