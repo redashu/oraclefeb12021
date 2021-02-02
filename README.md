@@ -341,3 +341,187 @@ Create a container to verify everything is working fine then delete container
 If application is working fine then only push this image to docker hub
 
 ```
+
+# Storage in Docker 
+
+<img src="st.png">
+
+## attaching external storage and mounting it some where 
+
+```
+[root@ip-172-31-32-255 docker]# lsblk 
+NAME    MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+xvda    202:0    0  50G  0 disk 
+`-xvda1 202:1    0  50G  0 part /
+[root@ip-172-31-32-255 docker]# lsblk 
+NAME    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+xvda    202:0    0   50G  0 disk 
+`-xvda1 202:1    0   50G  0 part /
+xvdf    202:80   0  100G  0 disk 
+[root@ip-172-31-32-255 docker]# mkfs.xfs  -i size=512  /dev/xvdf 
+meta-data=/dev/xvdf              isize=512    agcount=4, agsize=6553600 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=0
+data     =                       bsize=4096   blocks=26214400, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+log      =internal log           bsize=4096   blocks=12800, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+[root@ip-172-31-32-255 docker]# mkdir  /mnt/oracleDE 
+[root@ip-172-31-32-255 docker]# mount  /dev/xvdf  /mnt/oracleDE/
+[root@ip-172-31-32-255 docker]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        2.0G     0  2.0G   0% /dev
+tmpfs           2.0G     0  2.0G   0% /dev/shm
+tmpfs           2.0G  504K  2.0G   1% /run
+tmpfs           2.0G     0  2.0G   0% /sys/fs/cgroup
+/dev/xvda1       50G  4.1G   46G   9% /
+overlay          50G  4.1G   46G   9% /var/lib/docker/overlay2/4ae7a23f80e3763f07629a06e8447e4a9227955132e47eb270227f538a422efc/merged
+tmpfs           395M     0  395M   0% /run/user/1000
+/dev/xvdf       100G  135M  100G   1% /mnt/oracleDE
+
+```
+
+## changing docker Engine storage 
+
+```
+[root@ip-172-31-32-255 docker]# cd  /etc/sysconfig/
+[root@ip-172-31-32-255 sysconfig]# ls
+acpid       clock     docker          init        modules          nfs            rpc-rquotad  run-parts  sysstat.ioconf
+atd         console   docker-storage  irqbalance  netconsole       raid-check     rpcbind      selinux
+authconfig  cpupower  grub            keyboard    network          rdisc          rsyncd       sshd
+chronyd     crond     i18n            man-db      network-scripts  readonly-root  rsyslog      sysstat
+[root@ip-172-31-32-255 sysconfig]# vim docker
+[root@ip-172-31-32-255 sysconfig]# vim docker
+[root@ip-172-31-32-255 sysconfig]# systemctl daemon-reload 
+[root@ip-172-31-32-255 sysconfig]# systemctl restart docker 
+[root@ip-172-31-32-255 sysconfig]# cat  docker
+# The max number of open files for the daemon itself, and all
+# running containers.  The default value of 1048576 mirrors the value
+# used by the systemd service unit.
+DAEMON_MAXFILES=1048576
+
+# Additional startup options for the Docker daemon, for example:
+# OPTIONS="--ip-forward=true --iptables=true"
+# By default we limit the number of open files per container
+OPTIONS="--default-ulimit nofile=1024:4096 -g /mnt/oracleDE "
+
+# How many seconds the sysvinit script waits for the pidfile to appear
+# when starting the daemon.
+DAEMON_PIDFILE_TIMEOUT=10
+
+
+```
+## sync older location data to new location 
+
+```
+ rsync -avp  /var/lib/docker/   /mnt/oracleDE/
+```
+## restart docker engine 
+
+```
+[root@ip-172-31-32-255 ~]# systemctl restart  docker 
+[root@ip-172-31-32-255 ~]# docker  images
+REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE
+dockerashu/ashujsp   v001                0b4ecb40fc83        5 hours ago         668MB
+alpine               latest              e50c909a8df2        4 days ago          5.61MB
+python               latest              4b9378be0bb9        7 days ago          885MB
+oraclelinux          8.3                 f4a1f2c861ca        2 weeks ago         429MB
+java                 latest              d23bdf5b1b1b        4 years ago         643MB
+[root@ip-172-31-32-255 ~]# docker  ps  -a
+CONTAINER ID        IMAGE                     COMMAND             CREATED             STATUS                       PORTS               NAMES
+4f2b18e47f37        dockerashu/ashujsp:v001   "catalina.sh run"   About an hour ago   Exited (143) 6 minutes ago                       xweb1
+
+```
+
+# Context in Docker 
+
+```
+5548  docker  context  create   oracleDE  --docker  "host=tcp://52.90.28.29:2375" 
+
+❯ docker  context   ls
+NAME                TYPE                DESCRIPTION                               DOCKER ENDPOINT               KUBERNETES ENDPOINT                                                                  ORCHESTRATOR
+default             moby                Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   https://A92AAA991CBADD5F5AA797FAFEDB39EE.gr7.us-east-1.eks.amazonaws.com (default)   swarm
+oracleDE *          moby                                                          tcp://52.90.28.29:2375                                           
+
+
+----
+   docker  context   use oracleDE
+   
+```
+
+
+# DB in Container 
+
+```
+docker  run -d  --name ashudb -e  MYSQL_ROOT_PASSWORD=oracle123  mysql    
+
+## login to DB container 
+
+❯ docker exec -it  ashudb1  bash
+root@e1848926c195:/# 
+root@e1848926c195:/# mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.23 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> 
+
+
+```
+
+## creating volume 
+
+```
+❯ docker volume  create  ashuvol1
+ashuvol1
+❯ docker volume  ls
+DRIVER    VOLUME NAME
+local     1bae536d85da192be49079dbbd51350424b958f9ea58fb4dc51e76de0f86b23e
+local     21c590c1e64b1afc944c8adac4e8d1537c1926ee3cdd2157d88805bec5e06d3d
+local     ashuvol1
+
+```
+
+## creating container 
+
+```
+❯ docker  run  -it --name ashuxc1  -v  ashuvol1:/mnt/ashutoshh   alpine  sh
+/ # cd  /mnt/
+/mnt # ls
+ashutoshh
+/mnt # cd ashutoshh/
+/mnt/ashutoshh # ls
+/mnt/ashutoshh # mkdir hello 
+/mnt/ashutoshh # mkdir nice 
+/mnt/ashutoshh # ls
+hello  nice
+/mnt/ashutoshh # echo  heyy >whatsup.txt 
+/mnt/ashutoshh # ls
+hello        nice         whatsup.txt
+
+```
+## sharing volume in different cases 
+
+```
+❯ docker run -it --name xv1  -v  ashuvol1:/okkk oraclelinux:8.3  bash
+[root@6f6223790b92 /]# cd  /okkk/
+[root@6f6223790b92 okkk]# ls
+hello  nice  whatsup.txt
+[root@6f6223790b92 okkk]# exit
+❯ docker  run  -it --name ashuxc1  -v  ashuvol1:/mnt/ashutoshh   alpine  sh
+/ # cd /mnt/ashutoshh/
+/mnt/ashutoshh # ls
+hello        nice         whatsup.txt
+
+```
