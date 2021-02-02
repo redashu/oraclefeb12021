@@ -315,4 +315,29 @@ eth0      Link encap:Ethernet  HWaddr 02:42:AC:11:00:02
           
    ```
    
-   
+  ## Question 2 
+  
+  ```
+  Q2.  create container from centos latest image and do the below things 
+
+In this container create a file called  hello.txt with data “hii docker” using vim editor
+Check ip address of the container and write that ip in hello.txt 
+Ip address must be checked from inside the container only 
+
+  ```
+  
+## Question 3
+
+```
+Q3.  build a docker image  and push it to docker hub 
+
+Use this url “https://github.com/mdn/beginner-html-site-styled” (USE THIS LINK inside dockerfile only)
+Create a dockerfile by the name  <yourname>.dockerfile
+Use any image in FROM statement but you need to install httpd server 
+Copy above html based application into the document root of httpd server 
+Use ENTRYPOINT to define parent process so that whenever container go created this must host this application by default.
+Name of image during build time will be  <yourname>apache:httpd2
+Create a container to verify everything is working fine then delete container
+If application is working fine then only push this image to docker hub
+
+```
