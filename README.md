@@ -80,3 +80,50 @@ CONTAINER ID   IMAGE          COMMAND             CREATED          STATUS       
 42cb4df252c3   0b4ecb40fc83   "catalina.sh run"   3 seconds ago    Up 2 seconds    0.0.0.0:2233->8080/tcp   webapp
 
 ```
+
+# Image sharing 
+
+<img src="imgshare.png">
+
+## Backup & restore 
+
+```
+❯ docker  images
+REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+ashujsp      v001      0b4ecb40fc83   27 minutes ago   668MB
+tomcat       latest    66d886628b2a   6 hours ago      668MB
+alpine       latest    e50c909a8df2   4 days ago       5.61MB
+❯ 
+❯ docker  save  -o  ashuwebapp.tar  ashujsp:v001
+
+
+=== removing image
+
+
+❯ docker  rmi  ashujsp:v001
+Untagged: ashujsp:v001
+Deleted: sha256:0b4ecb40fc832e44a34f533acb325ab8953efaa2664b7219232806d2fc171451
+Deleted: sha256:0d9dfdd25ac1b635987ddb0387dae649171d05616c229c91bfee4c44d66f8eb0
+Deleted: sha256:ae72d546abe23893c52e136469416504846609bf77745b767ef58c828bc57d26
+Deleted: sha256:a92a8548037ea863c3fa7e17afebd4e35ef09973e23428d4d1755f0e79b5f1bb
+Deleted: sha256:e96a0eeec63bf3a9a89b1cf0d7b99d69da4d6860ce893ca00c627ff1133db675
+Deleted: sha256:091e12f6276c879870c1db185074b1bc1fe058f677bb08a8d58417e4eb9d6168
+Deleted: sha256:696acf9199ca2b7e84f977d11b620f273c8859bb2db6311576957ea03b9c2cdf
+Deleted: sha256:a23a92a617507dbc150ab1a18874bf844ac06acd97caf9734211cd648cceeab2
+
+```
+
+##  Restore 
+
+```
+❯ docker  load -i  ashuwebapp.tar
+a22c7f5c03d4: Loading layer [==================================================>]  4.096kB/4.096kB
+406cedfa6c3d: Loading layer [==================================================>]  8.192kB/8.192kB
+Loaded image: ashujsp:v001
+❯ docker  images
+REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+ashujsp      v001      0b4ecb40fc83   31 minutes ago   668MB
+tomcat       latest    66d886628b2a   7 hours ago      668MB
+alpine       latest    e50c909a8df2   4 days ago       5.61MB
+
+```
