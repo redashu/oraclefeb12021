@@ -150,3 +150,152 @@ docker  push dockerashu/ashujsp:v001
 
 ['OCR'] ('https://www.oracle.com/webfolder/technetwork/tutorials/obe/oci/registry/index.html')
 
+
+# Docker networking 
+
+<img src="net1.png">
+
+## creating container and checking ip 
+
+```
+❯ docker  run  -itd --name x1 alpine ping fb.com
+28c5b5b92954a2549daea701199ad6524feea8d69ae862e2c62e2e840b7d0062
+❯ docker  ps
+CONTAINER ID   IMAGE     COMMAND         CREATED         STATUS         PORTS     NAMES
+28c5b5b92954   alpine    "ping fb.com"   6 seconds ago   Up 3 seconds             x1
+❯ docker  exec -it  x1 sh
+/ # ifconfig 
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:11:00:02  
+          inet addr:172.17.0.2  Bcast:172.17.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:14 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:28 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:1096 (1.0 KiB)  TX bytes:2568 (2.5 KiB)
+          
+   ```
+   
+   ## second container 
+   
+   ```
+   ❯ docker  run  -itd --name x2 alpine ping fb.com
+f8bdff4386dc802c23dd3f50977a322d514b513725feb3c00932aac1744a99d2
+❯ docker  ps
+CONTAINER ID   IMAGE     COMMAND         CREATED              STATUS              PORTS     NAMES
+f8bdff4386dc   alpine    "ping fb.com"   3 seconds ago        Up 2 seconds                  x2
+28c5b5b92954   alpine    "ping fb.com"   About a minute ago   Up About a minute             x1
+❯ docker  exec -it  x2 sh
+/ # ifconfig 
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:11:00:03  
+          inet addr:172.17.0.3  Bcast:172.17.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:11 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:18 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:846 (846.0 B)  TX bytes:1588 (1.5 KiB)
+          
+   ```
+   
+   ## network with NAT 
+   
+   <img src="nat.png">
+   
+   ## Docker network bridges 
+   
+   ```
+   ❯ docker  network  ls
+NETWORK ID     NAME      DRIVER    SCOPE
+11c51a457560   bridge    bridge    local
+0cecd29f7ec2   host      host      local
+c891d3c2e465   none      null      local
+❯ docker  network  inspect  bridge
+[
+    {
+        "Name": "bridge",
+        "Id": "11c51a4575605fb0280b3816d223c8a95bf49989931ca797cb28e158a65c5cfd",
+        "Created": "2021-01-08T15:48:50.2018942Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.17.0.0/16",
+                    "Gateway": "172.17.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "28c5b5b92954a2549daea701199ad6524feea8d69ae862e2c62e2e840b7d0062": {
+                "Name": "x1",
+                "EndpointID": "24115b11aef958ec0e40c71d72c0c4f66b134f47811684917869aab8d2b9cce4",
+                "MacAddress": "02:42:ac:11:00:02",
+                "IPv4Address": "172.17.0.2/16",
+                "IPv6Address": ""
+            },
+            "f8bdff4386dc802c23dd3f50977a322d514b513725feb3c00932aac1744a99d2": {
+                "Name": "x2",
+                "EndpointID": "de0410e34bc1ccabb9520c2782320bc7ee7aebaf2b45e5a0b855fae3faa0c49a",
+                "MacAddress": "02:42:ac:11:00:03",
+                "IPv4Address": "172.17.0.3/16",
+                "IPv6Address": ""
+
+```
+## creating bridges 
+
+```
+❯ docker network  ls
+NETWORK ID     NAME      DRIVER    SCOPE
+11c51a457560   bridge    bridge    local
+0cecd29f7ec2   host      host      local
+c891d3c2e465   none      null      local
+❯ docker network  create ashubr1
+a07dfa4e4534cec9a1ffbede30b8a1300dc68095083ff5cf5f7fa8fa31dbc089
+❯ docker network  ls
+NETWORK ID     NAME      DRIVER    SCOPE
+a07dfa4e4534   ashubr1   bridge    local
+11c51a457560   bridge    bridge    local
+0cecd29f7ec2   host      host      local
+c891d3c2e465   none      null      local
+❯ docker network  create ashubr2  --subnet 192.168.0.0/16
+96a792e26dcb650b93343695783f5cf0ea15c41763077e2d86f0fc36fb50cac7
+❯ docker network ls
+NETWORK ID     NAME      DRIVER    SCOPE
+a07dfa4e4534   ashubr1   bridge    local
+96a792e26dcb   ashubr2   bridge    local
+11c51a457560   bridge    bridge    local
+0cecd29f7ec2   host      host      local
+c891d3c2e465   none      null      local
+
+
+```
+
+## bridge container 
+
+```
+5505  docker network  create ashubr1 
+ 5506  docker network  ls
+ 5507  docker network  create ashubr2  --subnet 192.168.0.0/16  
+ 5508  docker network ls
+ 5509  history
+ 5510  docker network inspect ashubr1
+ 5511  docker network  ls
+ 5512  docker network  inspect ashubr2
+ 5513  history
+ 5514  docker run -d --name x3 --network ashubr1 alpine ping fb.com 
+ 5515  docker run -d --name x4 --network ashubr2 alpine ping fb.com 
+ 5516  docker  ps
+ 5517  docker run -d --name x5 --network ashubr2  --ip 192.168.0.100   alpine ping fb.com 
+ 
+ ```
+ 
+     
