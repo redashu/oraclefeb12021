@@ -298,4 +298,21 @@ c891d3c2e465   none      null      local
  
  ```
  
-     
+ ## changing ip of a running container 
+ 
+ ```
+ docker run -it --rm --privileged alpine
+/ # ifconfig eth0 172.17.0.100
+/ # ifconfig eth0
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:11:00:02  
+          inet addr:172.17.0.100  Bcast:172.17.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:9 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:766 (766.0 B)  TX bytes:0 (0.0 B)
+          
+          
+   ```
+   
+   
