@@ -204,3 +204,53 @@ Removing ashuc123 ... done
 Removing network mycompose_ashubrx1
 
 ```
+
+
+## if compose has a different file name 
+
+```
+❯ ls
+docker-compose.yaml
+❯ mv  docker-compose.yaml ashu.yml
+❯ ls
+ashu.yml
+❯ docker-compose up -d
+ERROR: 
+        Can't find a suitable configuration file in this directory or any
+        parent. Are you in the right directory?
+
+        Supported filenames: docker-compose.yml, docker-compose.yaml
+        
+❯ docker-compose -f  ashu.yml   up -d
+Creating network "mycompose_ashubrx1" with the default driver
+Creating ashuc123 ... done
+❯ docker-compose -f  ashu.yml   ps
+  Name         Command       State   Ports
+------------------------------------------
+ashuc123   ping google.com   Up           
+❯ docker-compose -f  ashu.yml   down
+Stopping ashuc123 ... done
+Removing ashuc123 ... done
+Removing network mycompose_ashubrx1
+
+```
+
+## compose for DB deployment 
+
+```
+version: "3.8"
+volumes: # creating volume
+ ashdbvol1: # name of volume
+networks:  # creating network that is optional since v2 of compose file
+ ashubrx2: # name of network 
+
+services:
+ ashudb1:
+  image: mysql # image from docker hub if not present
+  container_name: ashudbc1 # optional 
+  environments: # passing env variable 
+   MYSQL_ROOT_PASSWORD: Oracle123 
+  volumes: # to attach volume created above
+   -  "ashudbvol1:/var/lib/mysql" # mounting volume 
+
+```
