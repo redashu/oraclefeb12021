@@ -101,5 +101,63 @@ timeToStop: Nonexistent
 
 ```
 
+## minikube more commands 
 
+```
+❯ minikube status
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+timeToStop: Nonexistent
+
+❯ 
+❯ minikube   ssh
+docker@minikube:~$ 
+docker@minikube:~$ 
+docker@minikube:~$ exit
+logout
+
+
+```
+
+## KUbectl (client of k8s )
+
+## Install On mac 
+
+```
+5758  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"
+ 5759  chmod +x ./kubectl
+ 5760  sudo mv ./kubectl /usr/local/bin/kubectl
+ 5761  kubectl version --client
+ 
+```
+
+
+## For windows client 
+
+```
+https://dl.k8s.io/release/v1.20.0/bin/windows/amd64/kubectl.exe
+
+```
+
+# Connecting to k8s master 
+
+```
+❯ kubectl version
+Client Version: version.Info{Major:"1", Minor:"20", GitVersion:"v1.20.2", GitCommit:"faecb196815e248d3ecfb03c680a4507229c2a56", GitTreeState:"clean", BuildDate:"2021-01-13T13:28:09Z", GoVersion:"go1.15.5", Compiler:"gc", Platform:"darwin/amd64"}
+Server Version: version.Info{Major:"1", Minor:"20", GitVersion:"v1.20.2", GitCommit:"faecb196815e248d3ecfb03c680a4507229c2a56", GitTreeState:"clean", BuildDate:"2021-01-13T13:20:00Z", GoVersion:"go1.15.5", Compiler:"gc", Platform:"linux/amd64"}
+❯ 
+❯ kubectl cluster-info
+Kubernetes control plane is running at https://127.0.0.1:55016
+KubeDNS is running at https://127.0.0.1:55016/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+
+```
+
+
+##. 
 
