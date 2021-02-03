@@ -78,3 +78,27 @@ docker  run -it  --name x11 -v  /etc/passwd:/hello.txt    alpine  sh
 docker  run  -d --name ashuwebui -p 1100:9000 -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer
 ```
 
+# IAC -- Using Docker compose 
+
+<img src="compose.png">
+
+## checking compose version 
+
+```
+❯ docker-compose -v
+docker-compose version 1.27.4, build 40524192
+
+```
+## docker-compose install link manually 
+
+[docker compose link](https://docs.docker.com/compose/install/)
+
+## Docker compsoe install on Linux host 
+
+```
+ 82  sudo curl -L "https://github.com/docker/compose/releases/download/1.28.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+   83  sudo chmod +x /usr/local/bin/docker-compose
+   84  sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+   85  docker-compose  -v
+
+```
