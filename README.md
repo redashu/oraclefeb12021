@@ -28,6 +28,20 @@
 <img src="karch3.png">
 
 
+# Mininode Discussion 
+
+## CNI (Container network interface)
+
+[CNI](https://github.com/containernetworking/cni)
+
+## Minion Node CNI [L1]
+
+<img src="cni.png">
+
+## Minion Node [kubelet & kube-proxy ]
+
+<img src="kmin.png">
+
 
 
 
