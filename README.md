@@ -102,3 +102,105 @@ docker-compose version 1.27.4, build 40524192
    85  docker-compose  -v
 
 ```
+
+## docker compose file version 
+
+[compose](https://docs.docker.com/compose/compose-file/)
+
+## Docker compose file format 
+
+<img src="filef.png">
+
+## Example 1
+
+```
+version: "3.8"
+networks: # for creating bridge network in DE
+ ashubrx1: # name of bridge
+
+services:
+ ashuapp1: # first app/svc name
+  image: alpine
+  container_name: ashuc123
+  command: ping google.com 
+  networks: # for using network 
+   - ashubrx1  # name of network created below
+
+# docker compose file v3 can automatically create network if we don't define
+
+## IN docker cli 
+# docker network create ashubrx1 
+# docker run --name ashuc123 --network ashubrx1 alpine ping google.com
+
+```
+
+## deployment of compose file 
+
+```
+❯ ls
+docker-compose.yaml
+❯ docker-compose up -d
+Creating network "mycompose_ashubrx1" with the default driver
+Creating ashuc123 ... done
+❯ docker-compose  ps
+  Name         Command       State   Ports
+------------------------------------------
+ashuc123   ping google.com   Up 
+
+```
+
+## compsoe more commands
+
+```
+❯ docker-compose  ps
+  Name         Command       State   Ports
+------------------------------------------
+ashuc123   ping google.com   Up           
+❯ docker-compose  kill
+Killing ashuc123 ... done
+❯ docker-compose  ps
+  Name         Command        State     Ports
+---------------------------------------------
+ashuc123   ping google.com   Exit 137        
+❯ docker-compose  start
+Starting ashuapp1 ... done
+❯ docker-compose  ps
+  Name         Command       State   Ports
+------------------------------------------
+ashuc123   ping google.com   Up           
+
+```
+
+## docker compose history 
+
+```
+5679  docker-compose up -d 
+ 5680  docker-compose  ps
+ 5681  docker-compose  logs 
+ 5682  docker-compose  logs -f
+ 5683  history
+ 5684  docker-compose  ps
+ 5685  docker-compose  kill
+ 5686  docker-compose  ps
+ 5687  docker-compose  start
+ 5688  docker-compose  ps
+ 5689  docker-compose  stop
+ 5690  docker-compose  ps
+ 5691  docker-compose  start
+ 5692  history
+ 5693  ls
+ 5694  docker-compose
+ 5695  docker-compose  version 
+ 5696  docker-compose  images
+ 5697  docker-compose ps
+ 5698  docker-compose kill 
+ 5699  docker-compose rm 
+ 5700  docker-compose ps
+ 5701  docker-compose up -d
+ 5702  docker-compose ps
+❯ docker-compose down
+Stopping ashuc123 ... done
+Removing ashuc123 ... done
+Removing network mycompose_ashubrx1
+
+```
