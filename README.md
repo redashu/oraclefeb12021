@@ -391,3 +391,37 @@ WARNING: Image for service ashuapp3 was built because it did not already exist. 
 Creating ashucweb1 ... done
 
 ```
+
+
+## web app with db using compose 
+
+```
+# Use root/example as user/password credentials
+version: '3.8'
+volumes: # creating volume
+ ashudbdata: 
+services:
+
+  ashudb:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    container_name: dbc12
+    volumes: # mounting volume 
+     - ashudbdata:/var/lib/mysql/
+    environment:
+      MYSQL_ROOT_PASSWORD: Oracle098
+
+  ashuwebapp:
+    image: adminer # pre configure web server 
+    container_name: ashuwebc99 
+    restart: always
+    depends_on: # don't up this container untill ashudb app is not ready
+     - ashudb 
+    ports:
+      - 8080:8080
+  # its having html /css /js based fronted 
+  # php based backend app server 
+  
+  ```
+  
