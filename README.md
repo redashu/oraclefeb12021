@@ -397,3 +397,36 @@ service/ashus1   NodePort   10.111.122.81   <none>        1234:32115/TCP   60s
 
 
 
+## delete all from customn 
+
+```
+❯ kubectl delete all --all -n ashuproject1
+pod "ashu-pod-1" deleted
+service "ashus1" deleted
+```
+
+# Replication controller (RC)
+
+<img src="rc.png">
+
+```
+apiVersion: v1
+kind: ReplicationController
+metadata:
+ name: ashuapp1
+ namespace: ashuproject1
+spec:
+ replicas: 1 # no of pod you want 
+ template: # RC will be using templates to create POD 
+  metadata:
+   labels:
+    x: helloashu
+  spec:
+   containers:
+   - image: dockerashu/ashujsp:v001 # tomcat image
+     name: ashuc1
+     ports:
+     - containerPort: 8080
+ ```
+ 
+ 
