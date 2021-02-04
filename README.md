@@ -205,3 +205,15 @@ kubectl run hellopod1  --image=nginx --port 80 --dry-run=client  -o yaml  >ashup
 
 ```
 
+# Accessing application running in POD 
+
+## Case 1 -- when you are client of kubernetes 
+
+```
+ kubectl  port-forward  hellopod1  3333:80
+Forwarding from 127.0.0.1:3333 -> 80
+Forwarding from [::1]:3333 -> 80
+Handling connection for 3333
+Handling connection for 3333
+
+```
