@@ -291,5 +291,16 @@ status:
 
 ```
 
+## deployment of service nodeport 
+
+```
+ kubectl  apply -f  ashusvc1.yaml
+service/ashus1 created
+❯ kubectl   get  service
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+ashus1       NodePort    10.97.30.168   <none>        1234:31293/TCP   6s
+
+```
+
 
 
