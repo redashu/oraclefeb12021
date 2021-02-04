@@ -217,3 +217,79 @@ Handling connection for 3333
 Handling connection for 3333
 
 ```
+
+## Pod application access problem 
+
+<img src="ipaccess.png">
+
+## label will be used by service to find the Pods
+
+<img src="label.png">
+
+## Pod with Label 
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+ name: ashu-pod-1 # name of my pod
+ labels: # identity to my pod that will be used by service
+  x: helloashu  # it will be key: value format 
+spec: # info about application
+ containers:
+ - image: nginx # image from docker hub 
+   name: ashuc1 # name of container 
+   ports: # default port of application 
+   - containerPort: 80
+   
+```
+
+## label checking 
+
+```
+ kubectl  get  po  --show-labels -o wide
+NAME         READY   STATUS    RESTARTS   AGE   IP           NODE           NOMINATED NODE   READINESS GATES   LABELS
+ashu-pod-1   1/1     Running   0          32s   172.17.0.2   minikube-m02   <none>           <none>            x=helloashu
+
+```
+##  service type in k8s
+
+<img src="stype.png">
+
+## Nodeport service type 
+
+<img src="np.png">
+
+## creating nodeport service 
+
+```
+kubectl  create  service  nodeport  ashus1  --tcp  1234:80  --dry-run=client -o yaml  >ashusvc1.yaml
+
+```
+
+## service nodeport yaml explain 
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels: # label of service 
+    app: ashus1
+  name: ashus1 # name of service 
+spec:
+  ports:
+  - name: 1234-80
+    port: 1234 # service port number 
+    protocol: TCP
+    targetPort: 80 # target application port 
+  selector: # this is the Finder of pod using label 
+   x: helloashu # this is the Label of Pod 
+  type: NodePort # type of service 
+status:
+  loadBalancer: {}
+
+```
+
+
+
