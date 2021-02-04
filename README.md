@@ -325,5 +325,75 @@ k8s-minion3      Ready    <none>                 11m   v1.20.2
 
 <img src="lb1.png">
 
+# Namespace 
+
+<img src="ns.png">
+
+```
+❯ kubectl  get  namespace
+NAME              STATUS   AGE
+default           Active   103m
+kube-node-lease   Active   103m
+kube-public       Active   103m
+kube-system       Active   103m
+
+```
+## Internal k8s component 
+
+```
+❯ kubectl  get  pods  -n kube-system
+NAME                                       READY   STATUS    RESTARTS   AGE
+calico-kube-controllers-744cfdf676-f9gbw   1/1     Running   0          103m
+calico-node-22rmm                          1/1     Running   0          103m
+calico-node-4sddc                          1/1     Running   0          103m
+calico-node-bq5qp                          1/1     Running   0          103m
+calico-node-g55jq                          1/1     Running   0          103m
+coredns-74ff55c5b-rzgw5                    1/1     Running   0          105m
+coredns-74ff55c5b-v5jdf                    1/1     Running   0          105m
+etcd-k8s-masternode                        1/1     Running   0          105m
+kube-apiserver-k8s-masternode              1/1     Running   0          105m
+kube-controller-manager-k8s-masternode     1/1     Running   0          105m
+kube-proxy-7bx6g                           1/1     Running   0          105m
+kube-proxy-wq88z                           1/1     Running   0          105m
+kube-proxy-zl582                           1/1     Running   0          105m
+kube-proxy-zmtpq                           1/1     Running   0          105m
+kube-scheduler-k8s-masternode              1/1     Running   0          105m
+
+```
+
+## Namespace creation 
+
+```
+❯ kubectl  create  namespace  ashuproject1
+namespace/ashuproject1 created
+❯ kubectl  get  ns
+NAME              STATUS   AGE
+ashuproject1      Active   6s
+default           Active   107m
+kube-node-lease   Active   107m
+kube-public       Active   107m
+kube-system       Active   107m
+
+```
+## pod & svc deployment in custom namespace 
+
+```
+5987  kubectl  create  namespace  ashuproject1
+ 5988  kubectl  get  ns
+ 5989  kubectl apply -f  ashupod1.yaml 
+ 5990  kubectl apply -f  ashusvc1.yaml
+ 5991  kubectl get  po 
+ 5992  kubectl get  po  -n ashuproject1
+ 5993  kubectl get svc  -n ashuproject1
+ 5994  kubectl get svc,pod  -n ashuproject1
+❯ kubectl get  all -n ashuproject1
+NAME             READY   STATUS    RESTARTS   AGE
+pod/ashu-pod-1   1/1     Running   0          66s
+
+NAME             TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+service/ashus1   NodePort   10.111.122.81   <none>        1234:32115/TCP   60s
+
+```
+
 
 
