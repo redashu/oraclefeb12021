@@ -302,5 +302,28 @@ ashus1       NodePort    10.97.30.168   <none>        1234:31293/TCP   6s
 
 ```
 
+# remote k8s cluster connect
+
+```
+ kubectl  get  nodes  --kubeconfig  Desktop/admin.conf
+NAME             STATUS   ROLES                  AGE   VERSION
+k8s-masternode   Ready    control-plane,master   11m   v1.20.2
+k8s-minion1      Ready    <none>                 11m   v1.20.2
+k8s-minion2      Ready    <none>                 11m   v1.20.2
+k8s-minion3      Ready    <none>                 11m   v1.20.2
+❯ cd  Desktop
+❯ kubectl  get  nodes  --kubeconfig  admin.conf
+NAME             STATUS   ROLES                  AGE   VERSION
+k8s-masternode   Ready    control-plane,master   12m   v1.20.2
+k8s-minion1      Ready    <none>                 11m   v1.20.2
+k8s-minion2      Ready    <none>                 11m   v1.20.2
+k8s-minion3      Ready    <none>                 11m   v1.20.2
+
+```
+
+## label service 
+
+<img src="lb1.png">
+
 
 
