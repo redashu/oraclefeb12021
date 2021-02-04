@@ -144,4 +144,64 @@ pod "ashu-pod-1" deleted
 
 ```
 
+## auto generation of POD yaml 
+
+```
+❯ kubectl run hellopod1  --image=nginx --port 80 --dry-run=client  -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: hellopod1
+  name: hellopod1
+spec:
+  containers:
+  - image: nginx
+    name: hellopod1
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+```
+
+## POd generate into json format 
+
+```
+ kubectl run hellopod1  --image=nginx --port 80 --dry-run=client  -o json
+{
+    "kind": "Pod",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "hellopod1",
+        "creationTimestamp": null,
+        "labels": {
+            "run": "hellopod1"
+        }
+    },
+    "spec": {
+        "containers": [
+            {
+                "name": "hellopod1",
+                "image": "nginx",
+                "ports": [
+                    {
+                        "containerPort": 80
+                    }
+                ],
+                "resources": {}
+            }
+        ],
+
+```
+
+## generate pod yaml/json and store in a file 
+
+```
+kubectl run hellopod1  --image=nginx --port 80 --dry-run=client  -o yaml  >ashupod2.yaml
+
+```
 
