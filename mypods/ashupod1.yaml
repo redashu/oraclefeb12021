@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+ namespace: ashuproject1 # name of namespace 
+ name: ashu-pod-1 # name of my pod
+ labels: # identity to my pod that will be used by service
+  x: helloashu  # it will be key: value format 
+spec: # info about application
+ containers:
+ - image: nginx # image from docker hub 
+   name: ashuc1 # name of container 
+   ports: # default port of application 
+   - containerPort: 80

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels: # label is here
+    run: hellopod1 # key: value 
+  name: hellopod1 # name of the POd 
+spec:
+  containers:
+  - image: nginx
+    name: hellopod1
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
