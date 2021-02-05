@@ -81,4 +81,131 @@ ashuapp1-jw9d2   1/1     Running   0          10s     192.168.214.29   k8s-minio
 <img src="realdep.png">
 
 
+## deleting all resource in k8s under namespace 
+
+```
+ kubectl delete  all --all
+pod "ashuapp1-8gddh" deleted
+replicationcontroller "ashuapp1" deleted
+service "myjspsvc" deleted
+
+
+```
+## taking sample app 
+
+### image building for app v1 
+
+```
+❯ docker  build  -t  dockerashu/myapp:v1  https://github.com/redashu/testwebapp.git\#main
+Sending build context to Docker daemon  75.26kB
+Step 1/5 : FROM nginx
+latest: Pulling from library/nginx
+a076a628af6f: Already exists 
+0732ab25fa22: Pull complete 
+d7f36f6fe38f: Pull complete 
+f72584a26f32: Pull complete 
+7125e4df9063: Pull complete 
+Digest: sha256:10b8cc432d56da8b61b070f4c7d2543a9ed17c2b23010b43af434fd40e2ca4aa
+Status: Downloaded newer image for nginx:latest
+ ---> f6d0b4767a6c
+Step 2/5 : MAINTAINER ashutoshh@linux.com
+ ---> Running in deed6f5f57eb
+Removing intermediate container deed6f5f57eb
+ ---> 816a9cde8f6a
+Step 3/5 : ADD ashu.html /usr/share/nginx/html/index.html
+ ---> 21bd7fe7f800
+Step 4/5 : COPY k8s.png /usr/share/nginx/html/k8s.png
+ ---> 86573b98df06
+Step 5/5 : EXPOSE 80
+ ---> Running in fbb98b837363
+Removing intermediate container fbb98b837363
+ ---> 77957dc624c3
+Successfully built 77957dc624c3
+Successfully tagged dockerashu/myapp:v1
+
+```
+
+## pushing image to docker hub (public repo)
+
+```
+6106  docker login -u dockerashu
+ 6107  docker  push   dockerashu/myapp:v1
+```
+
+## PUshing image to OCR 
+
+```
+❯ docker  login  phx.ocir.io
+Username: axmbtg8judkl/learntechbyme@gmail.com
+
+====
+
+❯ docker  tag 77957dc624c3  phx.ocir.io/axmbtg8judkl/myapp:orv1
+❯ docker push  phx.ocir.io/axmbtg8judkl/myapp:orv1
+The push refers to repository [phx.ocir.io/axmbtg8judkl/myapp]
+ebf8891039c7: Pushed 
+d003d65dcbc2: Pushed 
+85fcec7ef3ef: Pushed 
+3e5288f7a70f: Pushed 
+56bc37de0858: Pushed 
+1c91bf69a08b: Pushed 
+cb42413394c4: Pushed 
+orv1: digest: sha256:a00b8fb0384cbe3dff185256ffa510c96247cc759ec255ff20cf9edb2f02a105 size: 1777
+
+```
+## creating deployment in k8s using docker hub image
+
+```
+ kubectl  create  deployment ashuwebdep  --image=dockerashu/myapp:v1  --dry-run=client -o yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashuwebdep
+  name: ashuwebdep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashuwebdep
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashuwebdep
+    spec:
+      containers:
+      - image: dockerashu/myapp:v1
+        name: myapp
+        resources: {}
+status: {}
+❯ kubectl  create  deployment ashuwebdep  --image=dockerashu/myapp:v1  --dry-run=client -o yaml  >deploy1.yaml
+
+```
+
+## Deployment 
+
+```
+❯ kubectl  config  get-contexts
+CURRENT   NAME                          CLUSTER      AUTHINFO           NAMESPACE
+*         kubernetes-admin@kubernetes   kubernetes   kubernetes-admin   ashuproject1
+❯ kubectl apply -f  deploy1.yaml
+deployment.apps/ashuwebdep created
+❯ kubectl  get  deployment
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+ashuwebdep   1/1     1            1           9s
+❯ kubectl  get  deploy
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+ashuwebdep   1/1     1            1           12s
+❯ kubectl get  rs
+NAME                   DESIRED   CURRENT   READY   AGE
+ashuwebdep-775f8d9bc   1         1         1       17s
+❯ kubectl get  po
+NAME                         READY   STATUS    RESTARTS   AGE
+ashuwebdep-775f8d9bc-n26px   1/1     Running   0          21s
+
+```
+
 
