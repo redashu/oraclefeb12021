@@ -248,4 +248,20 @@ REVISION  CHANGE-CAUSE
 
 ```
 
+## rollback 
+
+```
+❯ kubectl  rollout  history deployment ashuwebdep
+deployment.apps/ashuwebdep 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+
+❯ kubectl rollout undo deployment ashuwebdep  --to-revision=1
+deployment.apps/ashuwebdep rolled back
+❯ kubectl  rollout status  deployment ashuwebdep
+deployment "ashuwebdep" successfully rolled out
+
+```
+
 
