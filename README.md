@@ -264,4 +264,57 @@ deployment "ashuwebdep" successfully rolled out
 
 ```
 
+## Deployment using private registry based docker image
+
+```
+kubectl  create  deployment  privdep --image=phx.ocir.io/axmbtg8judkl/myapp:orv1  --dry-run=client -o yaml >pdep.yml
+
+```
+
+# SEcret in k8s
+
+<img src="secret.png">
+
+## creating secret 
+
+```
+kubectl  create  secret   docker-registry  ashuocr1  --docker-server=phx.ocir.io --docker-username=axmbtg8judkl/learntechbyme@gmail.com  --docker-password=  -n ashuproject1
+
+```
+
+
+## Injecting secret in YAML 
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: privdep
+  name: privdep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: privdep
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: privdep
+    spec:
+      imagePullSecrets:
+      - name: ashuocr1 # calling secret 
+      containers:
+      - image: phx.ocir.io/axmbtg8judkl/myapp:orv1
+        name: myapp
+        resources: {}
+status: {}
+
+```
+
+
+
 
