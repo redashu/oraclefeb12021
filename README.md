@@ -208,4 +208,44 @@ ashuwebdep-775f8d9bc-n26px   1/1     Running   0          21s
 
 ```
 
+## Deployment to service create 
+
+```
+❯ kubectl  get  deploy
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+ashuwebdep   1/1     1            1           3m24s
+❯ kubectl  expose deployment ashuwebdep  --type LoadBalancer --port 1234 --target-port 80 --name ashusvc123
+service/ashusvc123 exposed
+❯ kubectl get  svc
+NAME         TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+ashusvc123   LoadBalancer   10.98.30.199   <pending>     1234:30072/TCP   4s
+
+```
+## updating app 
+
+```
+6162  docker  build  -t  dockerashu/myapp:v2  https://github.com/redashu/testwebapp.git\#main
+ 6163  docker push dockerashu/myapp:v2
+ 6164  history
+ 6165  docker images
+ 6166  history
+ 6167  kubectl describe deploy ashuwebdep
+ 6168  kubectl  set  image deployment ashuwebdep  myapp=dockerashu/myapp:v2
+ 6169  kubectl  get deploy 
+ 6170  kubectl describe deploy ashuwebdep
+ 
+ ```
+ 
+ ## checking version history 
+ 
+ ```
+ ❯ kubectl  rollout  history deployment ashuwebdep
+deployment.apps/ashuwebdep 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+
+
+```
+
 
