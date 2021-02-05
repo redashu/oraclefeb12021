@@ -494,4 +494,95 @@ x1        NodePort   10.96.60.119     <none>        1234:30742/TCP   21m
 
 ```
 
+# dashboard deployment in k8s
+
+```
+ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+namespace/kubernetes-dashboard created
+serviceaccount/kubernetes-dashboard created
+service/kubernetes-dashboard created
+secret/kubernetes-dashboard-certs created
+secret/kubernetes-dashboard-csrf created
+secret/kubernetes-dashboard-key-holder created
+configmap/kubernetes-dashboard-settings created
+role.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrole.rbac.authorization.k8s.io/kubernetes-dashboard created
+rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+deployment.apps/kubernetes-dashboard created
+service/dashboard-metrics-scraper created
+deployment.apps/dashboard-metrics-scraper created
+
+```
+
+## checking more things 
+
+```
+❯ kubectl  get  deploy  -n kubernetes-dashboard
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+dashboard-metrics-scraper   1/1     1            1           69s
+kubernetes-dashboard        1/1     1            1           70s
+❯ kubectl  get  po  -n kubernetes-dashboard
+NAME                                         READY   STATUS    RESTARTS   AGE
+dashboard-metrics-scraper-7b59f7d4df-l4hfb   1/1     Running   0          82s
+kubernetes-dashboard-74d688b6bc-q6w98        1/1     Running   0          83s
+❯ kubectl  get  svc  -n kubernetes-dashboard
+NAME                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+dashboard-metrics-scraper   ClusterIP   10.97.215.126   <none>        8000/TCP   91s
+kubernetes-dashboard        ClusterIP   10.104.74.61    <none>        443/TCP    98s
+
+```
+
+## Management & authorization user
+
+```
+❯ kubectl  config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: DATA+OMITTED
+    server: https://52.205.97.11:6443
+  name: kubernetes
+contexts:
+- context:
+    cluster: kubernetes
+    namespace: ashuproject1
+    user: kubernetes-admin
+  name: kubernetes-admin@kubernetes
+current-context: kubernetes-admin@kubernetes
+kind: Config
+preferences: {}
+users:
+- name: kubernetes-admin
+  user:
+    client-certificate-data: REDACTED
+    client-key-data: REDACTED
+❯ kubectl  config get-contexts
+CURRENT   NAME                          CLUSTER      AUTHINFO           NAMESPACE
+*         kubernetes-admin@kubernetes   kubernetes   kubernetes-admin   ashuproject1
+
+```
+
+## service account in k8s
+
+<img src="user.png">
+
+## checking secret of sa in k8s
+
+```
+❯ kubectl get sa  -n kubernetes-dashboard
+NAME                   SECRETS   AGE
+default                1         14m
+kubernetes-dashboard   1         14m
+❯ kubectl get secret  -n kubernetes-dashboard
+NAME                               TYPE                                  DATA   AGE
+default-token-jnbm8                kubernetes.io/service-account-token   3      14m
+kubernetes-dashboard-certs         Opaque                                0      14m
+kubernetes-dashboard-csrf          Opaque                                1      14m
+kubernetes-dashboard-key-holder    Opaque                                2      14m
+kubernetes-dashboard-token-h77bp   kubernetes.io/service-account-token   3      14m
+❯ kubectl describe  secret kubernetes-dashboard-token-h77bp  -n kubernetes-dashboard
+
+```
+
 
