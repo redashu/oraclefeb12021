@@ -315,6 +315,37 @@ status: {}
 
 ```
 
+# STORAGE in k8s
+
+<img src="st.png">
+
+[volumes](https://kubernetes.io/docs/concepts/storage/volumes/)
+
+# emptyDir volume 
+
+## Case 1 
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashupod1
+  name: ashupod1
+spec:
+  containers:
+  - image: alpine
+    name: ashupod1
+    command: ["/bin/sh","-c","ping google.com"] # to define partent process
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+
+```
+
 
 
 
