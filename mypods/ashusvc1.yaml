@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ashuproject1
+  creationTimestamp: null
+  labels: # label of service 
+    app: ashus1
+  name: ashus1 # name of service 
+  
+spec:
+  ports:
+  - name: 1234-80
+    port: 1234 # service port number 
+    protocol: TCP
+    targetPort: 80 # target application port 
+  selector: # this is the Finder of pod using label 
+   x: helloashu # this is the Label of Pod 
+  type: NodePort # type of service 
+status:
+  loadBalancer: {}
