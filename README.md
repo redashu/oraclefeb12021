@@ -429,4 +429,45 @@ x1     NodePort   10.96.60.119   <none>        1234:30742/TCP   6s
 
 ```
 
+## Portainer deployment using HostPath volume type 
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mywebui
+  name: mywebui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mywebui
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: mywebui
+    spec:
+      nodeName: k8s-minion3 # this is called manual scheduling 
+      volumes:
+      - name: ashuwebvol # name of volume 
+        hostPath:
+         path: /var/run/docker.sock # path from minion 3
+         type: Socket 
+      containers:
+      - image: portainer/portainer
+        name: portainer
+        ports:
+        - containerPort: 9000
+        volumeMounts: # mounting volume into container 
+        - name: ashuwebvol # name of volume created above 
+          mountPath: /var/run/docker.sock # mount location in container 
+        resources: {}
+status: {}
+
+```
+
 
