@@ -413,4 +413,20 @@ status: {}
 
 ```
 
+###
+
+```
+❯ kubectl apply -f multicpod.yaml
+pod/ashupod1 created
+❯ kubectl get  po
+NAME       READY   STATUS    RESTARTS   AGE
+ashupod1   2/2     Running   0          5s
+❯ kubectl expose pod ashupod1 --type NodePort --port 1234 --target-port 80 --name x1
+service/x1 exposed
+❯ kubectl get  svc
+NAME   TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+x1     NodePort   10.96.60.119   <none>        1234:30742/TCP   6s
+
+```
+
 
