@@ -470,4 +470,28 @@ status: {}
 
 ```
 
+##
+
+```
+❯ kubectl apply -f  portainer.yml
+deployment.apps/mywebui created
+❯ kubectl get  deploy
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+mywebui   1/1     1            1           5s
+❯ kubectl get  pod
+NAME                       READY   STATUS    RESTARTS   AGE
+ashupod1                   2/2     Running   0          25m
+mywebui-57795546c6-h5gwl   1/1     Running   0          9s
+❯ kubectl get  deploy
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+mywebui   1/1     1            1           16s
+❯ kubectl expose deployment mywebui  --type NodePort --port 3344 --target-port 9000
+service/mywebui exposed
+❯ kubectl get  svc
+NAME      TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+mywebui   NodePort   10.108.126.231   <none>        3344:31712/TCP   6s
+x1        NodePort   10.96.60.119     <none>        1234:30742/TCP   21m
+
+```
+
 
