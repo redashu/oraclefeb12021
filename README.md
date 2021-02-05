@@ -54,4 +54,31 @@ myjspsvc   NodePort   10.101.205.25   <none>        1234:30834/TCP   5s
 
 ```
 
+## scaling pod manually 
+
+```
+❯ kubectl  scale rc  ashuapp1  --replicas=5
+replicationcontroller/ashuapp1 scaled
+❯ kubectl  get   rc
+NAME       DESIRED   CURRENT   READY   AGE
+ashuapp1   5         5         5       29m
+❯ kubectl  get   po -o wide
+NAME             READY   STATUS    RESTARTS   AGE     IP               NODE          NOMINATED NODE   READINESS GATES
+ashuapp1-8gddh   1/1     Running   0          27m     192.168.214.21   k8s-minion3   <none>           <none>
+ashuapp1-97l9r   1/1     Running   0          3m37s   192.168.214.27   k8s-minion3   <none>           <none>
+ashuapp1-bnmj5   1/1     Running   0          10s     192.168.27.214   k8s-minion2   <none>           <none>
+ashuapp1-j7p8f   1/1     Running   0          10s     192.168.27.213   k8s-minion2   <none>           <none>
+ashuapp1-jw9d2   1/1     Running   0          10s     192.168.214.29   k8s-minion3   <none>           <none>
+
+```
+
+## Introduction to deployment in k8s
+
+<img src="k8sdep.png">
+
+## Reality of Deployment 
+
+<img src="realdep.png">
+
+
 
