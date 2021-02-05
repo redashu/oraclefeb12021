@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashuwebdep
+  name: ashuwebdep # name of deployment 
+spec:
+  replicas: 1 # no of pod 
+  selector:
+    matchLabels:
+      app: ashuwebdep
+  strategy: {}
+  template: # using template deployment will create POD like RC 
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashuwebdep
+    spec:
+      containers:
+      - image: dockerashu/myapp:v1
+        name: myapp # container name 
+        resources: {}
+status: {}
